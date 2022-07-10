@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8"/>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="content-type" content="no-cache, must-revalidate" />
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+    <title>个人信息</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/font-awesome.css">
+    <link rel="stylesheet" href="../css/element/index.css">
+    <link rel="stylesheet" href="../css/hsg.css">
+</head>
+<body>
+<div id="wrapper" v-cloak>
+    <div >
+        <div style="padding: 0 20px">
+            <div>
+                <div style="color: #666; font-weight: bold; border-bottom: 1px solid #ccc; padding: 10px 0; margin-bottom: 20px; font-size: 30px;">修改个人信息</div>
+            </div>
+
+            <div style="margin-top: 10px">
+                <div style="border: 1px solid #ff6b31;">
+                    <div style="padding: 5px; border-bottom: 1px solid #ff6b31; color: white; background-color: #ff6b31;">修改个人信息</div>
+                    <div style="border: 1px solid #ccc; padding: 10px">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form class="form-horizontal">
+                                    <input type="hidden" v-model="entity.id">
+									<div  class="form-group"><label class="col-sm-3 control-label">账号</label><div class="col-sm-7"><input type="text" class="form-control" v-model="entity.zhanghao" style="width: 160px" placeholder="请输入账号" id="zhanghao"></div></div>
+
+		<div  class="form-group"><label class="col-sm-3 control-label">名称</label><div class="col-sm-7"><input type="text" class="form-control" v-model="entity.mingcheng" style="width: 160px" placeholder="请输入名称" id="mingcheng"></div></div>
+		
+                                </form>
+                                <div style="text-align: center">
+                                    <button type="button" class="btn btn-primary" v-on:click="update()">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery-1.10.2.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/my.js"></script>
+<script src="../js/vue2.6.11/vue.min.js"></script>
+<script src="../js/vue2.6.11/axios.js"></script>
+<script src="../js/element/index.js"></script>
+
+<script>
+    function checkValid(entity) {
+        if (!entity.zhanghao || entity.zhanghao === "") {alert("账号不能为空"); return false;}
+if (!entity.mima || entity.mima === "") {alert("密码不能为空"); return false;}
+
+        return true;
+    }
+
+    new Vue({
+        el: '#wrapper',
+        data: {
+            authority: [],
+            permission: [],
+            storeUser: JSON.parse(localStorage.getItem("user")),
+            // gonghao: '',
+            //xingming:'',
+            user: {},
+
+			//youtupianimrl
+            objs: [],
+            pageInfo: {},
+            preActive: true,
+            nextActive: true,
+			//youtupianavt
+			//youxia2sui
+			//youxxiabiaoxduan
+            entity: {
+
+            }
+        },
+        created: function () {
+            this.loadData();
+            axios.get("/authority").then(res => {
+                if (res.data.code === '0') {
+                    this.authority = res.data.data;
+                } else {
+                    msg('error', res.data.msg);
+                }
+            });
+
+            this.user = JSON.parse(localStorage.getItem('user'));
+			//youcreatexia2sui
+			//youffxiaxbiaoxduan
+
+        },
+
+        methods: {
+            loadData() {
+                axios.get("/getAccountInfo").then(res => {
+                    if (res.data.code === '0') {
+                        this.entity = res.data.data;
+                        //tupianloadtb
+                    } else {
+                        msg('error', res.data.msg);
+                    }
+                });
+
+            },
+
+            update() {
+                if (checkValid(this.entity)) {
+                    axios.put(
+                        "/shiziduiwuInfo", this.entity
+                    ).then(res => {
+                        if (res.data.code === '0') {
+                            msg('success', '更新成功');
+                            this.loadData();
+                        } else {
+                            msg('error', res.data.msg);
+                        }
+                    })
+                }
+            },
+            //m_tupiansccsbaul
+            //logout() {
+            //    logout();
+            //}
+        }
+    })
+</script>
+</body>
+</html>

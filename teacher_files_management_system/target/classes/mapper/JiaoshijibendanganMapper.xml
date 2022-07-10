@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.JiaoshijibendanganInfoDao">
+
+    <select id="checkRepeat" resultType="java.lang.Integer">
+        select count(id) from `jiaoshijibendangan_info` where ${column} = #{value}
+        <if test="id != null">
+            and id != #{id}
+        </if>
+    </select>
+
+  <select id="findByGonghaozj" resultType="com.example.vo.JiaoshijibendanganInfoVo">
+        select * from `jiaoshijibendangan_info` where `gonghao` = #{username}
+    </select>
+
+    <select id="findByXingming" resultType="com.example.vo.JiaoshijibendanganInfoVo">
+        select `jiaoshijibendangan_info`.* from `jiaoshijibendangan_info`
+        where 1 = 1
+        <if test="xingming != null and xingming != '' and xingming != 'all'">
+            and `jiaoshijibendangan_info`.`xingming` like concat('%', #{xingming}, '%')
+        </if>
+        order by `jiaoshijibendangan_info`.id
+    </select>
+	<select id="findByXingminglist2" resultType="com.example.vo.JiaoshijibendanganInfoVo">
+        select `jiaoshijibendangan_info`.* from `jiaoshijibendangan_info`
+        where 1 = 1
+        <if test="xingming != null and xingming != '' and xingming != 'all'">
+            and `jiaoshijibendangan_info`.`xingming` like concat('%', #{xingming}, '%')
+        </if>
+		<if test="gonghao != null and gonghao != '' and gonghao != 'all'">
+            and `jiaoshijibendangan_info`.`gonghao` like concat('%', #{gonghao}, '%')
+        </if>
+        order by `jiaoshijibendangan_info`.id
+    </select>        <!--list23N-->
+    <select id="count" resultType="Integer">
+        select count(id) from `jiaoshijibendangan_info`
+    </select>
+</mapper>
+
